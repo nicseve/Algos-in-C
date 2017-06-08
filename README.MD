@@ -1,1 +1,1 @@
-Algorithms written in C.
+Algorithms and various small programs written in C. 
