@@ -22,7 +22,7 @@ void matrixP(int r, int c, int r2, int c2, int a[r] [c], int b[r2] [c2]){
 
 	if (c != r2){  //TESTS IF THE SIZES OF THE ARRAYS ALLOW FOR MULTIPLICATION BY COMPARING #COLUMNS IN A GIVEN ARRAY TO #ROWS IN THE OTHER
 		
-		printf("Matrices cannot be multiplied. A Rows: %d, B Columns: %d",c, r2);
+		printf("Matrices cannot be multiplied. A Columns: %d, B Rows: %d",c, r2);
 	}
 	
 	else{
