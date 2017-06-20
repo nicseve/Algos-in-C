@@ -3,14 +3,14 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#define MAX 100
 
-
- struct Bin{   //DECLARE SET OF BINS
+typedef struct t_bin {   //DECLARE BIN DATA STRUCT TYPE
 	int s[MAX];
 	int tot;
-	} bins[10];
+	} bin;
 
-
+/*
 int count //TOTAL NUMBER OF BINS CREATED
 
 
@@ -36,7 +36,7 @@ int best(int *sizes, int size of sizes array) { //BEST FIT FUNCTION
 		}
 
 		if (bf == 100)   //LOOP EXITED BECAUSE ALL BINS FULL. CREATE NEW BIN AND ADD DENOM
-			create struct Bin
+			Bin[i] = (Bin[i] *)malloc(sizeof(Bin));
 			add size to new bin array
 			and new bin total
 			count++
@@ -52,7 +52,6 @@ int best(int *sizes, int size of sizes array) { //BEST FIT FUNCTION
 
 
 
-/*
 -NEXT FLAG ALGO
 
 
@@ -77,16 +76,9 @@ last = 0; //initialize at 0;
 			last += 1 //last used bin was new bin because bin at last was full  */
 
 
-
-
-
-
 void hello(int s[],int p){
 	printf("Hello world!\n");
 	printf("Length of Array: %d\n",p);
-	for(int i = 0; i < p; i++){
-		printf("array element: %d\n",s[i]);
-		}
 	}
 
 void goodbye(){
@@ -95,24 +87,44 @@ void goodbye(){
 
 int main(int argc, char **argv)
 {
+
 	int k = 1;
 	int n[100];
+	int size = 0;
+	int bins_created = 0;
+
 	while (k < argc)
 	{
-			int j = 0;
-			char *null;
-			while ( k < argc && (n[j] = strtol(argv[k], &null, 10)) > 0  && !null[0] ){
-				if (n[j] > 100){
-					printf("error\n");
-					exit(1);
-				}
-				k++;
-				j++;
+		char *null;
+		while ( k < argc && (n[size] = strtol(argv[k], &null, 10)) > 0  && !null[0] ){
+			if (n[size] > 100){
+				printf("error\n");
+				exit(1);
+			}
+			k++;
+			size++;
 			}
 
+		if( !bins_created ){
+			//CREATE ARRAY OF BINS
+			bin bins[size];
+
+			//DECLARE POINTER B TO POINT AT ADDRESS OF BINS ARRAY
+			bin *b;
+			b = bins;
+			for (int i = 0; i < size; i++){
+				bins[i].tot = n[i];
+				printf("%d\n",bins[i].tot);}
+
+			//for (int i = 0; i < size; i++){
+				//printf("%d\n",b->tot);
+				//b++;}
+
+			bins_created = 1;
+		}
 
 		if ( (k != argc) && (strcmp(argv[k], "-hello")) == 0){
-			hello(n,j);
+			hello(n,size);
 			k++;
 			}
 
@@ -121,12 +133,14 @@ int main(int argc, char **argv)
 			k++;
 			}
 
+		if(k == argc)
+			break;
+
 		if(k != argc)
 			printf("Fatal error: not valid input");
 			exit(1);
 
 		}
-
 
 	return 0;
 }
