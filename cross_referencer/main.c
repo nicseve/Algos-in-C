@@ -17,9 +17,14 @@ struct wnode {
 
 
 	void treeprint(struct wnode *p){
+
 	if(p != NULL){
 		treeprint(p->left);
-		printf("\nLine Number: %d   Word: %s",p->lines_array[0],p->word);
+		int i = 0;
+		printf("\nWord: %s ", p->word);
+		while(i < (p->pos)  ){
+		printf("  Line Number: %d\n ", p->lines_array[i]);
+		i++;}
 		treeprint(p->right);
 		}
 	}
@@ -66,12 +71,17 @@ struct wnode *addword(struct wnode *p, char *w,int line_num){
 	if(p == NULL){
 		p = talloc();
 		p->word = strdups(w);
+		p->pos = 0;
+		p->count = 1;
 		p->lines_array = (int*)malloc(sizeof(int) * array_size);
-		p->lines_array[ (p->pos)++  ] = line_num;
+		p->lines_array[ (p->pos)++ ] = line_num;
 		p->left = p->right = NULL;
 
-	} else if ((cond = strcmp(w,p->word)) == 0 )
+	} else if ((cond = strcmp(w,p->word)) == 0 ){
 		p->count++;
+		if(p->lines_array[p->pos - 1] != line_num){
+			p->lines_array[ (p->pos)++ ] = line_num-1;}
+		}
 	else if (cond < 0)
 		p->left = addword(p->left,w,line_num);
 	else
@@ -83,7 +93,7 @@ struct wnode *addword(struct wnode *p, char *w,int line_num){
 
 
 void read_words (char *NAME,int f_size) {
-	int lnum = 0;
+	int lnum = 1;
 	char line[50] = "";
 	char x[512];
 	int k = 0;
@@ -91,15 +101,13 @@ void read_words (char *NAME,int f_size) {
 
 	FILE *fptr = fopen(NAME,"r");
 
-	//printf("%d",f_size);//FILE SIZE
 
 	while ( fgets (line, sizeof(line), fptr) != 0){
-		//printf("\n%s",line);
-		lnum ++;
 
 		for(int i = 0; line[i] != '\0'  ; i++){
 
-			if( line[i+1] == '\0'){
+			if(line[i+1] == '\0'){
+				x[k++] = tolower(line[i]);
 				x[k] = '\0';   //REFACTOR INTO SUBROUTINE
 
 				array_size = f_size/sizeof(line);
@@ -111,7 +119,8 @@ void read_words (char *NAME,int f_size) {
 				}
 
 			if( line[i] != ' '){
-				x[k++] = line[i];
+
+				x[k++] = tolower(line[i]);
 				//write letter to temp array
 				}
 
@@ -127,7 +136,7 @@ void read_words (char *NAME,int f_size) {
 			 //clear temp word array
 			}
 		}
-
+	lnum++;
 	}
 	treeprint(word);
 }
